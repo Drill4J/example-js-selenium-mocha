@@ -8,16 +8,12 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch",
-      "program": "${workspaceFolder}/dist/index.js",
-      "args": ["-u", "Edwin Hubble", "-w", "y"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch with other params",
-      "program": "${workspaceFolder}/dist/index.js",
-      "args": ["-u", "Enrico Fermi", "-w", "y"]
+      "name": "Mocha All",
+      "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      // "args": ["-r", "ts-node/register", "--timeout", "999999", "--colors", "${workspaceFolder}/modules/**/*-spec.ts"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "protocol": "inspector"
     }
   ]
 }

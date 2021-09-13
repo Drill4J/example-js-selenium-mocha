@@ -7,7 +7,7 @@ module.exports = {
   mode: process.env.NODE_ENV,
   target: 'node',
   externals: [nodeExternals()],
-  entry: './src/bin/index.ts',
+  entry: './src/index.ts',
   module: {
     rules: [
       {

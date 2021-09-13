@@ -1,0 +1,5 @@
+{
+  "extension": ["ts"],
+  "spec": "e2e/**/*.spec.ts",
+  "require": ["ts-node/register", "./e2e/hooks.ts"]
+}
