@@ -1,43 +1,36 @@
-// example hooks
+import { Builder, Capabilities, WebDriver } from 'selenium-webdriver';
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      driver: WebDriver;
+    }
+  }
+}
+
 export const mochaHooks = {
   // runs FOR EVERY FILE in parallel mode, and ONCE in serial mode
   async beforeAll() {
-    console.log('beforeAll...');
-    await sleep(1000);
-    console.log('beforeAll done');
-  },
-  async beforeEach() {
-    console.log('beforeEach', this.currentTest.title);
-    await sleep(1000);
-    console.log('beforeEach done', this.currentTest.title);
-  },
-  async afterEach() {
-    console.log('afterEach', this.currentTest.title);
-    await sleep(1000);
-    console.log('afterEach done', this.currentTest.title);
+    global.driver = await prepareWebdriver();
   },
   // runs FOR EVERY FILE in parallel mode, and ONCE in serial mode
   async afterAll() {
-    console.log('afterAll');
-    await sleep(1000);
-    console.log('afterAll done');
+    await global.driver.close();
   },
 };
 
-// runs ONLY ONCE both in parallel and serial mode
-export async function mochaGlobalSetup() {
-  console.log('mochaGlobalSetup...');
-  await sleep(2000);
-  console.log('mochaGlobalSetup done');
+async function prepareWebdriver() {
+  const chromeCapabilities = Capabilities.chrome();
+  chromeCapabilities.set('chromeOptions', { args: ['--headless'] });
+  return new Builder().forBrowser('chrome').usingServer(process.env.SELENIUM_HUB_URL).withCapabilities(chromeCapabilities).build();
 }
 
-// runs ONLY ONCE both in parallel and serial mode
-export async function mochaGlobalTeardown() {
-  console.log('mochaGlobalTeardown...');
-  await sleep(2000);
-  console.log('mochaGlobalTeardown done');
-}
+// // runs ONLY ONCE both in parallel and serial mode
+// export async function mochaGlobalSetup() {
+//   return new Promise(res => setTimeout(res, 100))
+// }
 
-async function sleep(ms) {
-  return new Promise(res => setTimeout(res, ms));
-}
+// // runs ONLY ONCE both in parallel and serial mode
+// export async function mochaGlobalTeardown() {
+//   return new Promise(res => setTimeout(res, 100))
+// }

@@ -1,5 +1,6 @@
 {
-  "extension": ["ts"],
+  "extension": ["ts", "d.ts"],
   "spec": "e2e/**/*.spec.ts",
-  "require": ["ts-node/register", "./e2e/hooks.ts"]
+  "timeout": 60000,
+  "require": ["ts-node/register", "./e2e/env.ts", "./e2e/hooks.ts"]
 }
