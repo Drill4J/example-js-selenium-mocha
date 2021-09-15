@@ -13,6 +13,7 @@
     "upath": "^2.0.1"
   },
   "devDependencies": {
+    "@drill4j/js-auto-test-agent": "0.0.6",
     "@types/chai": "^4.2.21",
     "@types/fs-extra": "^9.0.1",
     "@types/mocha": "^9.0.0",

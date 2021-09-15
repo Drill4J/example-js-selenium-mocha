@@ -15,7 +15,7 @@
       "internalConsoleOptions": "neverOpen",
       "protocol": "inspector",
       "smartStep": true,
-      "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js"]
+      "skipFiles": ["<node_internals>/**"] //, "${workspaceFolder}/node_modules/**/*.js"]
     }
   ]
 }
