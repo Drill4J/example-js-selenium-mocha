@@ -5,8 +5,6 @@
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist",
-    "baseUrl": "src",
     "lib": ["es2016"]
   },
   "include": ["e2e/**/*"],
