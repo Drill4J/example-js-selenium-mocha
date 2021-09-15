@@ -13,7 +13,9 @@
       // "args": ["-r", "ts-node/register", "--timeout", "999999", "--colors", "${workspaceFolder}/modules/**/*-spec.ts"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "protocol": "inspector"
+      "protocol": "inspector",
+      "smartStep": true,
+      "skipFiles": ["<node_internals>/**", "${workspaceFolder}/node_modules/**/*.js"]
     }
   ]
 }

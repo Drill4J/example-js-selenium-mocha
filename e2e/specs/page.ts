@@ -17,13 +17,20 @@ export async function createTodos(messages: string[]) {
 
 export async function toggleAll() {
   const toggleAllBtn = await global.driver.findElement(By.xpath('//label[@for="toggle-all"]'));
-  await toggleAllBtn.click();
+  const loc = await toggleAllBtn.getRect();
+  // await global.driver.executeScript(`
+  // document.body.addEventListener('click', function(e) { alert(e.x + ", " + e.y) })
+  // `);
+  await global.driver
+    .actions()
+    .move({ x: loc.x + 100, y: loc.y + 100 })
+    .click()
+    .perform();
 }
 
 // export async function editTodoWithText(prevText: string, textText: string) {
 //   const todoElement = await findTodoWithText(prevText);
 //   await global.driver.actions().doubleClick(todoElement);
-
 // }
 
 export async function findTodoWithText(text) {

@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { PageLoadStrategy } from 'selenium-webdriver/lib/capabilities';
 import * as Page from './page';
 
 describe('delete', function () {
