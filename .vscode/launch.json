@@ -10,12 +10,11 @@
       "request": "launch",
       "name": "Mocha All",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
-      // "args": ["-r", "ts-node/register", "--timeout", "999999", "--colors", "${workspaceFolder}/modules/**/*-spec.ts"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "protocol": "inspector",
       "smartStep": true,
-      "skipFiles": ["<node_internals>/**"] //, "${workspaceFolder}/node_modules/**/*.js"]
+      "skipFiles": ["<node_internals>/**"]
     }
   ]
 }

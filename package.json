@@ -1,6 +1,5 @@
 {
   "main": "dist/index.js",
-  "type": "module",
   "scripts": {
     "lint": "eslint . --ext .ts --fix",
     "test": "mocha"
@@ -8,37 +7,26 @@
   "author": "github.com/RomanDavlyatshin",
   "license": "Apache 2.0",
   "dependencies": {
+    "@drill4j/js-auto-test-agent": "^0.0.8",
     "axios": "^0.21.4",
-    "fs-extra": "^9.1.0",
-    "upath": "^2.0.1"
+    "chai": "^4.3.4",
+    "mocha": "^9.1.4",
+    "selenium-webdriver": "^4.1.1",
+    "ts-node": "^8.10.2"
   },
   "devDependencies": {
-    "@drill4j/js-auto-test-agent": "0.0.6",
     "@types/chai": "^4.2.21",
-    "@types/fs-extra": "^9.0.1",
     "@types/mocha": "^9.0.0",
-    "@types/selenium-webdriver": "^4.0.15",
+    "@types/node": "^17.0.9",
+    "@types/selenium-webdriver": "^4.0.16",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
-    "awesome-typescript-loader": "^5.2.1",
-    "chai": "^4.3.4",
-    "dotenv": "^10.0.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-drill4j": "0.0.2",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "git-format-staged": "^2.1.0",
-    "husky": "^4.3.0",
-    "mocha": "^9.1.1",
-    "nodemon": "^2.0.4",
     "prettier": "^2.1.2",
-    "selenium-webdriver": "^4.0.0-rc-1",
-    "ts-node": "^8.5.2",
-    "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.2.3",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-node-externals": "^2.5.2"
+    "typescript": "^4.2.3"
   }
 }
