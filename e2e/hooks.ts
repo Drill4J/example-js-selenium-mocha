@@ -1,11 +1,9 @@
 import { Builder, Capabilities, WebDriver } from 'selenium-webdriver';
 import { exec } from 'child_process';
 import os from 'os';
-import { Drill, DrillOptions } from '@drill4j/js-auto-test-agent';
+import { Drill, AdminAPI } from '@drill4j/js-auto-test-agent';
 import axios from 'axios';
 import { Runnable } from 'mocha';
-// import { AdminAPI } from '@drill4j/js-auto-test-agent/dist/admin-connect/types';
-let x: DrillOptions; // that seems to work, but line above does not
 
 let drill: Drill;
 
@@ -102,18 +100,12 @@ function getParentNameChain(currentTest) {
   return res;
 }
 
-function mapMochaTestToDrillTestResult(test: Runnable): any {
-  if (test.isPassed()) return 'PASSED';
-  if (test.isFailed()) return 'FAILED';
-  if (test.isPending()) return 'SKIPPED';
-  return 'UNKNOWN';
+function mapMochaTestToDrillTestResult(test: Runnable): AdminAPI.TestResult {
+  if (test.isPassed()) return AdminAPI.TestResult.PASSED;
+  if (test.isFailed()) return AdminAPI.TestResult.FAILED;
+  if (test.isPending) return AdminAPI.TestResult.SKIPPED;
+  return AdminAPI.TestResult.UNKNOWN;
 }
-// function mapMochaTestToDrillTestResult(test: Runnable): AdminAPI.TestResult {
-//   if (test.isPassed()) return AdminAPI.TestResult.PASSED;
-//   if (test.isFailed()) return AdminAPI.TestResult.FAILED;
-//   if (test.isPending) return AdminAPI.TestResult.SKIPPED;
-//   return AdminAPI.TestResult.UNKNOWN;
-// }
 
 // ---- TESTS SETUP ---- (got nothing to do with Drill4J)
 export async function mochaGlobalSetup() {
