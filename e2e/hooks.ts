@@ -155,11 +155,3 @@ async function executeCommand(cmd, delay = 100) {
 function sleep(ms) {
   return new Promise(res => setTimeout(res, ms));
 }
-
-declare global {
-  namespace NodeJS {
-    interface Global {
-      driver: WebDriver;
-    }
-  }
-}
