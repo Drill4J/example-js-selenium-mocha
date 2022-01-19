@@ -19,17 +19,3 @@ describe('create', function () {
     expect(todosListBefore.length).to.eq(todosListAfter.length);
   });
 });
-
-describe('edit', function () {
-  beforeEach(async function () {
-    await Page.open();
-    await Page.createTodo('hello world');
-  });
-
-  it('can complete', async function () {
-    const text = 'hello world';
-    await Page.markTodoAsComplete(text);
-    const todoElement = await Page.findCompletedTodo(text);
-    expect(todoElement).to.exist;
-  });
-});
