@@ -1,8 +1,8 @@
 const env = {
-  APP_URL: 'http://host.docker.internal:3000',
-  SELENIUM_HUB_URL: 'http://localhost:4444/wd/hub',
-  DEVTOOLS_PROXY_URL: 'http://localhost:8093',
-  ADMIN_URL: 'http://localhost:8090',
+  APP_URL: 'http://host.docker.internal:8080',
+  SELENIUM_HUB_URL: 'http://host.docker.internal:4444/wd/hub',
+  ADMIN_URL: 'http://host.docker.internal:8090',
+  DEVTOOLS_PROXY_URL: 'http://host.docker.internal:8093',
   AGENT_ID: 'todomvc-typescript-angular',
 };
 
