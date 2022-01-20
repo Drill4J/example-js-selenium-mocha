@@ -14,9 +14,11 @@ describe('delete', function () {
     expect(todosListAfter.length).to.be.lessThan(todosListBefore.length);
   });
 
-  it('can delete all', async function () {
-    await Page.removeAllTodos();
-    const todosList = await Page.getTodosListElement();
-    expect(todosList.length).to.eq(0);
+  describe('nested suite', () => {
+    it('can delete all', async function () {
+      await Page.removeAllTodos();
+      const todosList = await Page.getTodosListElement();
+      expect(todosList.length).to.eq(0);
+    });
   });
 });
