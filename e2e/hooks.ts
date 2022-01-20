@@ -3,9 +3,11 @@ import { exec } from 'child_process';
 import os from 'os';
 import { Drill, AdminAPI } from '@drill4j/js-auto-test-agent';
 import axios from 'axios';
+import upath from 'upath';
 import { Runnable } from 'mocha';
 
 let drill: Drill;
+let currentTestDetails: any; // FIXME type it (import from @drill4j/js-auto-test-agent)
 
 export const mochaHooks = {
   async beforeAll() {
@@ -41,9 +43,6 @@ export const mochaHooks = {
       // Your application's url
       targetHost: process.env.APP_URL,
 
-      // An arbitrary string, whatever you'd like to identify these tests by
-      engine: 'mocha+selenium',
-
       // devtoolsUrl: 'http://localhost:9222',
       webSocketDebuggerUrl,
     });
@@ -54,7 +53,22 @@ export const mochaHooks = {
   async beforeEach() {
     this.timeout(0); // for debug only
     const testName = getTestName(this.currentTest);
-    await drill.startTest(testName);
+    const testPath = getTestPath(this.currentTest);
+
+    currentTestDetails = {
+      testName,
+      params: {}, // Pass your test's param here (key-value)
+      engine: 'mocha+selenium', // An arbitrary string, whatever you'd like to identify these tests by
+      path: testPath,
+      // Metadata is an _arbitrary_ key-value, entirely ignored by Drill4J (hence, the repetition)
+      // It is just "attached" to test2runs entries
+      // Test launch script utilizes it to run selected files & grep tests by name
+      metadata: {
+        name: testName,
+        file: testPath,
+      },
+    };
+    await drill.startTest(currentTestDetails);
   },
   async afterEach() {
     this.timeout(0); // for debug only
@@ -69,8 +83,8 @@ export const mochaHooks = {
       start = end - this.currentTest.duration;
     }
     const result = mapMochaTestToDrillTestResult(this.currentTest);
-    const testName = getTestName(this.currentTest);
-    await drill.stopTest(testName, result, start, end);
+
+    await drill.stopTest(currentTestDetails, result, start, end);
   },
   async afterAll() {
     this.timeout(0); // for debug only
@@ -80,7 +94,13 @@ export const mochaHooks = {
 };
 
 // ---- HELPER FUNCTIONS ---- (format test results data for Drill4J)
-function getTestName(currentTest) {
+function getTestPath(currentTest: Runnable) {
+  const dirname = upath.normalize(__dirname); // upath is used to ensure universal '/' path separator
+  const testPath = upath.normalize(currentTest.file);
+  return testPath.replace(dirname, ''); // returns spec file path relative to ./e2e directory
+}
+
+function getTestName(currentTest: Runnable) {
   const testNameSeparator = ' ';
   const parentName = getParentNameChain(currentTest)
     .filter(x => x)
