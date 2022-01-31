@@ -18,4 +18,25 @@ describe('create', function () {
     const todosListAfter = await Page.getTodosListElement();
     expect(todosListBefore.length).to.eq(todosListAfter.length);
   });
+
+  ['value1', 'value2'].forEach(val => {
+    describe(`Parameterized suite with param "${val}" value`, function () {
+      it('create message', async function () {
+        const message = `This is ${val} message`;
+        await Page.createTodo(message);
+        await Page.findTodoWithText(message);
+      });
+      it(`case with param "${val}"`, async function () {
+        const message = `This is ${val} plan message`;
+        await Page.createTodo(message);
+        await Page.findTodoWithText(message);
+      });
+    });
+  });
+
+  it('name with regex-specific characters: ()[]', async function () {
+    const message = 'regex-specific example';
+    await Page.createTodo(message);
+    await Page.findTodoWithText(message);
+  });
 });
