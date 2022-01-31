@@ -6,6 +6,12 @@
 
   "configurations": [
     {
+      "name": "Debug Run Tests Script",
+      "program": "./run-tests.sh",
+      "request": "launch",
+      "type": "node"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Mocha All",
