@@ -1,10 +1,8 @@
 import { Builder, Capabilities, WebDriver } from 'selenium-webdriver';
-import { exec } from 'child_process';
-import os from 'os';
-import { Drill, AdminAPI } from '@drill4j/js-auto-test-agent';
+import { Drill } from '@drill4j/js-auto-test-agent';
 import axios from 'axios';
-import upath from 'upath';
-import { Runnable } from 'mocha';
+import { executeCommand } from './util';
+import { formatTestDetails, formatTestResult } from './drill-format-helpers';
 
 let drill: Drill;
 let currentTestDetails: any; // FIXME type it (import from @drill4j/js-auto-test-agent)
@@ -16,9 +14,8 @@ export const mochaHooks = {
     const chromeCapabilities = Capabilities.chrome();
     chromeCapabilities.set('chromeOptions', {
       args: [
-        // not important, used only for example
         '--headless',
-        // these are very important, you likely don't wanna change them
+        // important to Drill4J, instructs Chrome to expose DevTools API
         '--remote-debugging-port=9222',
         '--remote-debugging-address=0.0.0.0',
       ],
@@ -37,53 +34,33 @@ export const mochaHooks = {
       adminUrl: process.env.ADMIN_URL,
       devtoolsProxyUrl: process.env.DEVTOOLS_PROXY_URL,
 
-      // Agent's ID
-      agentId: process.env.AGENT_ID,
-
       // Your application's url
       targetHost: process.env.APP_URL,
 
-      // devtoolsUrl: 'http://localhost:9222',
       webSocketDebuggerUrl,
+
+      // Agent's ID
+      agentId: process.env.AGENT_ID,
+
+      // Add params below if running multiple agents in a group
+      // groupId: process.env.GROUP_ID, // instead of "agentId"
+      // injectDrillDataToHeaders: true,
     });
 
     await drill.ready();
-    await drill.startSession();
+    // 'e2e' is an arbitrary string
+    // used to distinguish between other types of tests employed on the project
+    // see run-tests.sh
+    await drill.startSession('e2e');
   },
   async beforeEach() {
     this.timeout(0); // for debug only
-    const testName = getTestName(this.currentTest);
-    const testPath = getTestPath(this.currentTest);
-
-    currentTestDetails = {
-      testName,
-      params: {}, // Pass your test's param here (key-value)
-      engine: 'mocha+selenium', // An arbitrary string, whatever you'd like to identify these tests by
-      path: testPath,
-      // Metadata is an _arbitrary_ key-value, entirely ignored by Drill4J (hence, the repetition)
-      // It is just "attached" to test2runs entries
-      // Test launch script utilizes it to run selected files & grep tests by name
-      metadata: {
-        name: testName,
-        file: testPath,
-      },
-    };
+    currentTestDetails = formatTestDetails(this.currentTest);
     await drill.startTest(currentTestDetails);
   },
   async afterEach() {
     this.timeout(0); // for debug only
-
-    let start, end;
-    const isSkippedTest = this.currentTest.isPending(); // mocha's oddities
-    if (isSkippedTest) {
-      end = 0;
-      start = 0;
-    } else {
-      end = Date.now();
-      start = end - this.currentTest.duration;
-    }
-    const result = mapMochaTestToDrillTestResult(this.currentTest);
-
+    const { result, start, end } = formatTestResult(this.currentTest);
     await drill.stopTest(currentTestDetails, result, start, end);
   },
   async afterAll() {
@@ -92,40 +69,6 @@ export const mochaHooks = {
     await global.driver.quit();
   },
 };
-
-// ---- HELPER FUNCTIONS ---- (format test results data for Drill4J)
-function getTestPath(currentTest: Runnable) {
-  const dirname = upath.normalize(__dirname); // upath is used to ensure universal '/' path separator
-  const testPath = upath.normalize(currentTest.file);
-  return testPath.replace(dirname, ''); // returns spec file path relative to ./e2e directory
-}
-
-function getTestName(currentTest: Runnable) {
-  const testNameSeparator = ' ';
-  const parentName = getParentNameChain(currentTest)
-    .filter(x => x)
-    .reverse()
-    .join(testNameSeparator);
-  return `${parentName}${testNameSeparator}${currentTest.title}`;
-}
-
-function getParentNameChain(currentTest) {
-  const res = [];
-  let ptr = currentTest.parent;
-  res.push(ptr.title);
-  while (ptr.parent) {
-    ptr = ptr.parent;
-    res.push(ptr.title);
-  }
-  return res;
-}
-
-function mapMochaTestToDrillTestResult(test: Runnable): AdminAPI.TestResult {
-  if (test.isPassed()) return AdminAPI.TestResult.PASSED;
-  if (test.isFailed()) return AdminAPI.TestResult.FAILED;
-  if (test.isPending) return AdminAPI.TestResult.SKIPPED;
-  return AdminAPI.TestResult.UNKNOWN;
-}
 
 // ---- TESTS SETUP ---- (got nothing to do with Drill4J)
 export async function mochaGlobalSetup() {
@@ -150,28 +93,4 @@ async function stopSeleniumServer() {
   } catch (e) {
     throw new Error(`Failed to stop Selenium Server. Reason: ${e?.message}`);
   }
-}
-
-async function executeCommand(cmd, delay = 100) {
-  console.log('\x1b[33m%s\x1b[0m', cmd); // print cmd in yellow
-  const options = {};
-  if (os.platform() === 'win32') {
-    (options as any).shell = 'bash';
-  }
-  const data = await new Promise((resolve, reject) => {
-    exec(cmd, options, (err, stdout, stderr) => {
-      if (err) {
-        (err as any).stderr = stderr;
-        reject(err);
-        return;
-      }
-      resolve(stdout);
-    });
-  });
-  await sleep(delay);
-  return data;
-}
-
-function sleep(ms) {
-  return new Promise(res => setTimeout(res, ms));
 }
