@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 const axios = require('axios');
 const os = require('os');
 const { exec } = require('child_process');

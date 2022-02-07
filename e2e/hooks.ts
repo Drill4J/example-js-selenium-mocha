@@ -1,11 +1,13 @@
-import { Builder, Capabilities, WebDriver } from 'selenium-webdriver';
+import { Builder, Capabilities } from 'selenium-webdriver';
 import { Drill } from '@drill4j/js-auto-test-agent';
 import axios from 'axios';
-import { executeCommand } from './util';
 import { formatTestDetails, formatTestResult } from './drill-format-helpers';
+import { dnsLookup } from './util';
 
 let drill: Drill;
 let currentTestDetails: any; // FIXME type it (import from @drill4j/js-auto-test-agent)
+
+console.log('process.env.DRILL4J_ADMIN_BACKEND_URL', process.env.DRILL4J_ADMIN_BACKEND_URL);
 
 export const mochaHooks = {
   async beforeAll() {
@@ -23,16 +25,17 @@ export const mochaHooks = {
 
     global.driver = await new Builder()
       .forBrowser('chrome')
-      .usingServer(process.env.SELENIUM_HUB_URL)
+      .usingServer(`http://${process.env.SELENIUM_HUB_HOST}:${process.env.SELENIUM_HUB_PORT}/wd/hub`)
       .withCapabilities(chromeCapabilities)
       .build();
 
-    const res = await axios.get(`http://localhost:9222/json/version`);
-    const webSocketDebuggerUrl = (res.data.webSocketDebuggerUrl as string).replace('localhost', 'host.docker.internal');
+    const host = await dnsLookup(process.env.SELENIUM_HUB_HOST); // FIXME selenium host matching browser host is just a "lucky" coincidence
+    const res = await axios.get(`http://${host}:9222/json/version`);
+    const webSocketDebuggerUrl = res.data.webSocketDebuggerUrl;
 
     drill = new Drill({
-      adminUrl: process.env.ADMIN_URL,
-      devtoolsProxyUrl: process.env.DEVTOOLS_PROXY_URL,
+      adminUrl: process.env.DRILL4J_ADMIN_BACKEND_URL,
+      devtoolsProxyUrl: process.env.DRILL4J_DEVTOOLS_PROXY_URL,
 
       // Your application's url
       targetHost: process.env.APP_URL,
@@ -40,10 +43,10 @@ export const mochaHooks = {
       webSocketDebuggerUrl,
 
       // Agent's ID
-      agentId: process.env.AGENT_ID,
+      agentId: process.env.DRILL4J_AGENT_ID,
 
       // Add params below if running multiple agents in a group
-      // groupId: process.env.GROUP_ID, // instead of "agentId"
+      // groupId: process.env.DRILL4J_GROUP_ID, // instead of "agentId"
       // injectDrillDataToHeaders: true,
     });
 
@@ -65,32 +68,7 @@ export const mochaHooks = {
   },
   async afterAll() {
     this.timeout(0); // for debug only
-    await drill.stopSession();
     await global.driver.quit();
+    await drill.stopSession();
   },
 };
-
-// ---- TESTS SETUP ---- (got nothing to do with Drill4J)
-export async function mochaGlobalSetup() {
-  await startSeleniumServer();
-}
-
-export async function mochaGlobalTeardown() {
-  await stopSeleniumServer();
-}
-
-async function startSeleniumServer() {
-  try {
-    await executeCommand('docker-compose -f e2e/docker-compose.yml down && docker-compose -f e2e/docker-compose.yml up -d', 5000);
-  } catch (e) {
-    throw new Error(`Failed to start Selenium Server. Reason: ${e?.message}`);
-  }
-}
-
-async function stopSeleniumServer() {
-  try {
-    await executeCommand('docker-compose -f e2e/docker-compose.yml down');
-  } catch (e) {
-    throw new Error(`Failed to stop Selenium Server. Reason: ${e?.message}`);
-  }
-}

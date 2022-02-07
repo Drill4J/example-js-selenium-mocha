@@ -16,6 +16,9 @@
       "request": "launch",
       "name": "Mocha All",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+      "env": {
+        "ENV_FILE_PATH": "./local.env"
+      },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "protocol": "inspector",
