@@ -68,7 +68,11 @@ export const mochaHooks = {
   },
   async afterAll() {
     this.timeout(0); // for debug only
+    try {
+      await drill.stopSession();
+    } catch (e) {
+      console.warn('Failed to stop Drill4J session. Reason:', e?.message);
+    }
     await global.driver.quit();
-    await drill.stopSession();
   },
 };
