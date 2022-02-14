@@ -15,7 +15,7 @@ const agentId = 'todomvc-typescript-angular';
     console.log('Getting tests2run recommendations from Drill4J...');
 
     // change in case of using service groups             /groups/${groupId}
-    const response = await axios.get(`${drillAdminUrl}/api/agents/${agentId}/plugins/test2code/data/tests-to-run`);
+    const response = await axios.get(`${process.env.DRILL4J_ADMIN_BACKEND_URL ||drillAdminUrl}/api/agents/${agentId}/plugins/test2code/data/tests-to-run`);
 
     const tests2run = response?.data?.byType?.[testType];
     if (Array.isArray(tests2run) && tests2run.length > 0) {
