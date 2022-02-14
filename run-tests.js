@@ -5,7 +5,7 @@ const { exec } = require('child_process');
 const testType = 'e2e'; // same to the value passed to drill.startSession(...); in e2e/hooks.ts
 const mochaPath = './node_modules/.bin/mocha';
 const testsDir = './e2e';
-const drillAdminUrl = 'http://host.docker.internal:8090';
+const drillAdminUrl = process.env.DRILL4J_ADMIN_BACKEND_URL || 'http://host.docker.internal:8090';
 const agentId = 'todomvc-typescript-angular';
 
 (async function () {
@@ -15,7 +15,7 @@ const agentId = 'todomvc-typescript-angular';
     console.log('Getting tests2run recommendations from Drill4J...');
 
     // change in case of using service groups             /groups/${groupId}
-    const response = await axios.get(`${process.env.DRILL4J_ADMIN_BACKEND_URL ||drillAdminUrl}/api/agents/${agentId}/plugins/test2code/data/tests-to-run`);
+    const response = await axios.get(`${drillAdminUrl}/api/agents/${agentId}/plugins/test2code/data/tests-to-run`);
 
     const tests2run = response?.data?.byType?.[testType];
     if (Array.isArray(tests2run) && tests2run.length > 0) {
