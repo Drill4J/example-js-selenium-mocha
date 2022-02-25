@@ -17,7 +17,11 @@
       "name": "Mocha All",
       "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
       "env": {
-        "ENV_FILE_PATH": "./local.env"
+        "ENV_FILE_PATH": "./local.env",
+        "DEBUG": "drill:*",
+        "DEBUG_COLORS": "true",
+        "FORCE_COLOR": "3",
+        "DEBUG_LOG_LEVEL": "4"
       },
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
