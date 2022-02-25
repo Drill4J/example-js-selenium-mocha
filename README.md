@@ -47,4 +47,6 @@ selenoid-cm](./test-environment/selenoid-cm))
     - When tests are completed coverage should be available in Admin UI
       - Finish active scope 
 
-    - Deploy second build (see steps above)
+5. Deploy second build (see steps above)
+
+6. Launch tests again (see steps above) (_Only recommended tests should be executed_)
