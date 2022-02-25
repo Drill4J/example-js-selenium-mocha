@@ -17,6 +17,9 @@ services:
       FORCE_COLOR: '3'
       DEBUG_LOG_LEVEL: '4'
 
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
     networks:
       grid:
 
