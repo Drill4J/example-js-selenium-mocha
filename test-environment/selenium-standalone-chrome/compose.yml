@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  chrome:
+    image: selenium/standalone-chrome:${SELENIUM_STANDALONE_CHROME_VERSION}
+    ports:
+      - '9222:9222' # devtools
+      - '4444:4444' # webdriver
+    shm_size: '2gb'
+    networks:
+      grid:
+
+networks:
+  grid:
