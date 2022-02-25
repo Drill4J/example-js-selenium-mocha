@@ -9,7 +9,7 @@
   "author": "github.com/RomanDavlyatshin",
   "license": "Apache 2.0",
   "dependencies": {
-    "@drill4j/js-auto-test-agent": "^0.1.0-beta.1",
+    "@drill4j/js-auto-test-agent": "^0.1.0-beta.2",
     "axios": "^0.21.4",
     "chai": "^4.3.4",
     "dotenv": "^16.0.0",
