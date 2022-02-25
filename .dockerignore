@@ -4,5 +4,4 @@
 !package.lock.json
 !run-tests.js
 !.mocharc.json
-!node_modules
 !tsconfig.json
