@@ -5,7 +5,7 @@ const { exec } = require('child_process');
 const testType = 'e2e'; // same to the value passed to drill.startSession(...); in e2e/hooks.ts
 const mochaPath = './node_modules/.bin/mocha';
 const testsDir = './e2e';
-const drillAdminUrl = 'http://host.docker.internal:8090';
+const drillAdminUrl = process.env.DRILL4J_ADMIN_BACKEND_URL || 'http://host.docker.internal:8090';
 const agentId = 'todomvc-typescript-angular';
 
 (async function () {
