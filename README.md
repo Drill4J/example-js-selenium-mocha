@@ -18,15 +18,15 @@ Features JavaScript coverage collection for tests executed in headless mode.
     - Compatible versions at the time of writing
     ```ini
       #backend
-      BACK_VERSION=0.8.0-46 # Drill4J Admin Backend
-      TEST2CODE_PLUGIN_VERSION=0.8.0-48
-      DEVTOOLS_PROXY_VERSION=0.1.0-beta.1
+      BACK_VERSION=0.8.0-79 # Drill4J Admin Backend
+      TEST2CODE_PLUGIN_VERSION=0.8.0-78
+      DEVTOOLS_PROXY_VERSION=0.1.0
       #ui
-      FRONT_VERSION=0.1.0-119
-      TEST2CODE_UI_VERSION=0.1.0-120
+      FRONT_VERSION=0.1.0-147
+	    TEST2CODE_UI_VERSION=0.1.0-135
       #js-agent
-      JS_AGENT_VERSION=0.3.0-beta.3
-      JS_PARSER=0.5.0-beta.0
+      JS_AGENT_VERSION=0.3.0-beta.4
+      JS_PARSER=0.5.0-beta.8
     ```
 
 2. Run TodoMVC app
