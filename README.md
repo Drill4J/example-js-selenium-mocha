@@ -14,39 +14,45 @@ Features JavaScript coverage collection for tests executed in headless mode.
 
 ## Launch
 
-1. Run Drill4J components - Admin Backend, Admin UI, DevTools Proxy, JS agent
-    - Compatible versions at the time of writing
-    ```ini
-      #backend
-      BACK_VERSION=0.8.0-79 # Drill4J Admin Backend
-      TEST2CODE_PLUGIN_VERSION=0.8.0-79
-      DEVTOOLS_PROXY_VERSION=0.1.0
-      #ui
-      FRONT_VERSION=0.1.0-147
-	    TEST2CODE_UI_VERSION=0.1.0-135
-      #js-agent
-      JS_AGENT_VERSION=0.3.0-beta.4
-      JS_PARSER=0.5.0-beta.8
-    ```
+1. Start Drill4J services
 
-2. Run TodoMVC app
-    - See [./test-environment/app](./test-environment/app) for example
-    - Deploy 2.0.0 only after tests are completed
+    - open [./test-environment/drill4j-services](./test-environment/drill4j-services) in terminal
+    - execute `docker-compose up -d`
 
-3. Run Selenoid (however you like, you can take a look at [./test-environment/selenoid](./test-environment/selenoid) or [./test-environment/
-selenoid-cm](./test-environment/selenoid-cm))
+2. Run TodoMVC app version
 
-4. Launch tests. You can do that either:
+    - open [./test-environment/app](./test-environment/app) in terminal
+    - execute `docker-compose --env-file build-1.0.0.env up -d`
+
+3. Register application in Drill4j
+
+    - open <http://localhost:8091>
+    - click "Add agent" button and follow the steps
+    - on `Step 2`, in `Target Host` field enter link to TodoMVC application (http://host.docker.internal:8080, note that [./docker-compose.yml](./docker-compose.yml) has `extra_hosts` property specified in order for that to work on Mac and Linux)
+
+4. Run Selenoid
+
+    - open [./test-environment/selenoid](./test-environment/selenoid) in terminal
+    - execute `docker pull selenoid/vnc_chrome:103.0`
+    - execute `docker-compose up -d`
+
+5. Launch tests. You can do that by either:
+
     - using Docker image
-      - check env vars in [`.env`](./.env)
+      - open [root directory](./) in terminal
       - run `docker-compose up`
+
     - or locally (Node.js 16.x required)
       - run `npm install`
       - run `npm run test_with_recommendations` (see package.json for details)
 
     - When tests are completed coverage should be available in Admin UI
-      - Finish active scope 
+      - Navigate to agent's [Test2Code plugin page](http://localhost:8091/agents/todomvc-typescript-angular/plugins/test2code/builds/1.0.0/overview?activeTab=methods)
+      - Click "Finish Scope" to save the collected metrics
 
-5. Deploy second build (see steps above)
+6. Deploy second app build
 
-6. Launch tests again (see steps above) (_Only recommended tests should be executed_)
+    - open [./test-environment/app](./test-environment/app) in terminal
+    - execute `docker-compose --env-file build-2.0.0.env up -d`
+
+7. Launch tests again (see steps above) (_This time, only recommended tests should be executed_)
