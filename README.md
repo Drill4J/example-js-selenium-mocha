@@ -46,13 +46,13 @@ Features JavaScript coverage collection for tests executed in headless mode.
       - run `npm install`
       - run `npm run test_with_recommendations` (see package.json for details)
 
-    - When tests are completed coverage should be available in Admin UI
+6. When tests are completed coverage should be available in Admin UI
       - Navigate to agent's [Test2Code plugin page](http://localhost:8091/agents/todomvc-typescript-angular/plugins/test2code/builds/1.0.0/overview?activeTab=methods)
       - Click "Finish Scope" to save the collected metrics
 
-6. Deploy second app build
+7. Deploy second app build
 
     - open [./test-environment/app](./test-environment/app) in terminal
     - execute `docker-compose --env-file build-2.0.0.env up -d`
 
-7. Launch tests again (see steps above) (_This time, only recommended tests should be executed_)
+8. Launch tests again (see steps above) (_This time, only recommended tests should be executed_)
