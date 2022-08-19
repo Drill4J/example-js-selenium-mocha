@@ -19,7 +19,7 @@ Features JavaScript coverage collection for tests executed in headless mode.
     ```ini
       #backend
       BACK_VERSION=0.8.0-79 # Drill4J Admin Backend
-      TEST2CODE_PLUGIN_VERSION=0.8.0-78
+      TEST2CODE_PLUGIN_VERSION=0.8.0-79
       DEVTOOLS_PROXY_VERSION=0.1.0
       #ui
       FRONT_VERSION=0.1.0-147
