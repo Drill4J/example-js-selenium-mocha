@@ -10,7 +10,7 @@ services:
       WAIT_HOSTS: drill-admin:8090
       UI_PLUGINS_URLS: 'test2code#https://cdn.jsdelivr.net/npm/@drill4j/test2code-ui@${TEST2CODE_UI_VERSION}/dist/Drill4J-test-to-code.js'
     networks:
-      - drill4j-dev-network
+      - example
     depends_on:
       drill-admin:
         condition: service_healthy
@@ -39,7 +39,7 @@ services:
       - 8090:8090
       - 6006:5006
     networks:
-      - drill4j-dev-network
+      - example
     volumes:
       - drill-data:/work
     depends_on:
@@ -62,7 +62,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - drill4j-dev-network
+      - example
 
   js-agent:
     image: drill4j/js-agent:${JS_AGENT_VERSION}
@@ -82,7 +82,7 @@ services:
     volumes:
       - drill-data-js-agent:/usr/src/app/js-agent-data
     networks:
-      - drill4j-dev-network
+      - example
     depends_on:
       drill-admin:
         condition: service_healthy
@@ -99,13 +99,6 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  agent-files:
-    image: drill4j/java-agent:${JAVA_AGENT_VERSION}
-    volumes:
-      - agent-files:/data
-    networks:
-      - drill4j-dev-network
-
 volumes:
   agent-files:
   drill-data:
@@ -113,4 +106,5 @@ volumes:
   drill-data-js-agent:
 
 networks:
-  drill4j-dev-network:
+  example:
+    name: example

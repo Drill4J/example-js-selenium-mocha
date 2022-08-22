@@ -19,6 +19,11 @@ Features JavaScript coverage collection for tests executed in headless mode.
     - open [./test-environment/drill4j-services](./test-environment/drill4j-services) in terminal
     - execute `docker-compose up -d`
 
+    > WARNING:
+    > - This is not definitive configuration for Drill4J services. Please refer to documentation on <https://drill4j.github.io> and find settings appropriate for your needs
+    >
+    > - Drill4J services have to be deployed separately from your test project, these files are added here just for example's sake
+
 2. Run TodoMVC app version
 
     - open [./test-environment/app](./test-environment/app) in terminal
@@ -53,6 +58,7 @@ Features JavaScript coverage collection for tests executed in headless mode.
 7. Deploy second app build
 
     - open [./test-environment/app](./test-environment/app) in terminal
+    - execute `docker-compose down`
     - execute `docker-compose --env-file build-2.0.0.env up -d`
 
 8. Launch tests again (see steps above) (_This time, only recommended tests should be executed_)

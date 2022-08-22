@@ -5,5 +5,9 @@ services:
     image: drill4j/todomvc-typescript-angular:${APP_BUILD}
     ports:
       - 8080:80
-    environment:
-      JS_PARSER_VERSION: ${JS_PARSER_VERSION}
+    networks:
+      - example
+
+networks:
+  example:
+    name: example
